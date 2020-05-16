@@ -11,6 +11,7 @@
     "faunadb": "^2.14.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "now": "^19.0.1"
   }
 }
