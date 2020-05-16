@@ -18,7 +18,7 @@ const runQuery = async function(query) {
     }).then((res) => res.json())
 }
 
-const register = function(email, password) {
+const register = function(email, password, name, location, phone) {
     console.log(email, password)
     const query = `
         mutation RegisterUser {
@@ -28,7 +28,18 @@ const register = function(email, password) {
             ) {
                 _id
             }
+        createUser(
+            data: { 
+                name: "${name}", 
+                location: "${location}",
+                phone: "${phone}" 
+            }) {
+            name
+            location
+            phone
+            _id
         }
+    }     
     `
     return runQuery(query).then((result) => {
         console.log('REGISTER RESULT: ', result)
