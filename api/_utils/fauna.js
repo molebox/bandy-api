@@ -6,6 +6,7 @@ let secret = faunaUserKey;
 let client = new faunadb.Client({secret: secret});
 
 
+
 const runQuery = async function(query) {
     return fetch('https://graphql.fauna.com/graphql', {
         method: 'POST',
@@ -18,8 +19,9 @@ const runQuery = async function(query) {
     }).then((res) => res.json())
 }
 
+/* Query(Lambda(["email", "password"], Create(Collection("Account"), {credentials: {password: Var("password")}, data: {email: Var("email")}}))) */
+
 const register = function(email, password, name, location, phone) {
-    console.log(email, password)
     const query = `
         mutation RegisterUser {
             register (
@@ -27,25 +29,30 @@ const register = function(email, password, name, location, phone) {
                 password: "${password}"
             ) {
                 _id
+                email
             }
-        createUser(
-            data: { 
-                name: "${name}", 
-                location: "${location}",
-                phone: "${phone}" 
-            }) {
-            name
-            location
-            phone
-            _id
-        }
+            createUser(
+                data: { 
+                  name: "${name}"
+                  email: "${email}"
+                  location: { 
+                    connect: "${location}" 
+                  } 
+                  phone: "${phone}"
+                }) {
+                name
+                phone
+                _id
+              }
     }     
     `
     return runQuery(query).then((result) => {
-        console.log('REGISTER RESULT: ', result)
-        return result.data.register
+        console.log('RegisterUser RESULT: ', result)
+        return result.data;
     })
 }
+
+/* Query(Lambda(["email", "password"], Select(["secret"], Login(Match(Index("accountByEmail"), []), {password: Var("password")})))) */
 
 const login = async function(email, password) {
     const query = `
@@ -57,7 +64,7 @@ const login = async function(email, password) {
         }
     `
     return runQuery(query).then((result) => {
-        console.log('QUERY RESULT: ', result)
+        console.log('LoginUser RESULT: ', result)
         secret = result.data.login
         client = new faunadb.Client({
             secret: secret
