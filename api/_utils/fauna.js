@@ -28,7 +28,6 @@ const register = function(email, password, name, location, phone) {
                 email: "${email}"
                 password: "${password}"
             ) {
-                _id
                 email
             }
             createUser(
@@ -42,6 +41,7 @@ const register = function(email, password, name, location, phone) {
                 }) {
                 name
                 phone
+                email
                 _id
               }
     }     
@@ -54,7 +54,7 @@ const register = function(email, password, name, location, phone) {
 
 /* Query(Lambda(["email", "password"], Select(["secret"], Login(Match(Index("accountByEmail"), []), {password: Var("password")})))) */
 
-const login = async function(email, password) {
+const login = function(email, password) {
     const query = `
         mutation LoginUser {
             login (

@@ -2,6 +2,7 @@ const {login} = require('./_utils/fauna');
 
 module.exports = (req, res) => {
     const data = JSON.parse(req.body);
+    console.log('login data: ', data)
     const {email, password} = data;
    login(email, password).then((result) => {
        console.log('the login result: ', result)
