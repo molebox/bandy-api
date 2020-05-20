@@ -19,7 +19,15 @@ const runQuery = async function(query) {
     }).then((res) => res.json())
 }
 
-/* Query(Lambda(["email", "password"], Create(Collection("Account"), {credentials: {password: Var("password")}, data: {email: Var("email")}}))) */
+// Query(
+//     Lambda(
+//       ["email", "password"],
+//       Create(Collection("Account"), {
+//         credentials: { password: Var("password") },
+//         data: { email: Var("email") }
+//       })
+//     )
+//   )
 
 const register = function(email, password, name, location, phone) {
     const query = `
@@ -52,7 +60,17 @@ const register = function(email, password, name, location, phone) {
     })
 }
 
-/* Query(Lambda(["email", "password"], Select(["secret"], Login(Match(Index("accountByEmail"), []), {password: Var("password")})))) */
+// Query(
+//     Lambda(
+//       ["email", "password"],
+//       Select(
+//         ["secret"],
+//         Login(Match(Index("accountByEmail"), Var("email")), {
+//           password: Var("password")
+//         })
+//       )
+//     )
+//   )
 
 const login = function(email, password) {
     const query = `
